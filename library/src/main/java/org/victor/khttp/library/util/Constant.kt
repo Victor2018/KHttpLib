@@ -18,6 +18,8 @@ class Constant {
 
         const val PAGE_SIZE: Int = 20
         const val GANK_URL: String = "https://gank.io/api/xiandu/categories"
+        const val PHONE_CODE_URL: String = "http://api.zg.xiaoyoureliao.net/cgi-bin/get_phone_code"
+        const val UPLOAD_IMG_URL: String = "http://demo.longott.com/v1/auth/avatar/upload"
 
     }
 }

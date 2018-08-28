@@ -32,7 +32,6 @@ import org.victor.khttp.library.data.FormImage
 
 class MainActivity : AppCompatActivity(),View.OnClickListener,GankView, PhoneCodeView,UploadView {
     var TAG: String = "MainActivity"
-    var url:String = Constant.GANK_URL
     var gankPresenter: GankPresenterImpl? = null
     var phoneCodePresenter: PhoneCodePresenterImpl? = null
     var uploadPresenter: UploadPresenterImpl? = null
@@ -73,7 +72,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener,GankView, PhoneCod
 
     fun sendGankRequest () {
         loadingDialog?.show();
-        gankPresenter?.sendRequest(url,null,null)
+        gankPresenter?.sendRequest(Constant.GANK_URL,null,null)
     }
 
     fun sendPhoneCode() {
@@ -96,8 +95,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener,GankView, PhoneCod
 
         request.data = data
 
-        var url:String = "http://api.zg.xiaoyoureliao.net/cgi-bin/get_phone_code"
-        phoneCodePresenter?.sendRequest(url, null, JSON.toJSONString(request))
+        phoneCodePresenter?.sendRequest(Constant.PHONE_CODE_URL, null, JSON.toJSONString(request))
     }
 
     fun sendUploadRequest () {
@@ -106,7 +104,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener,GankView, PhoneCod
         img.imgPath = "/sdcard/test.jpeg"
         img.mime = FormImage.getPictureType(img.imgPath)
         img.name = "file"
-        uploadPresenter?.sendRequest("http://demo.longott.com/v1/auth/avatar/upload", getHttpHeaderParm(), JSON.toJSONString(img))
+        uploadPresenter?.sendRequest(Constant.UPLOAD_IMG_URL, getHttpHeaderParm(), JSON.toJSONString(img))
     }
 
     fun getHttpHeaderParm(): HashMap<String, String> {
