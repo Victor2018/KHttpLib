@@ -7,6 +7,7 @@ import android.annotation.TargetApi
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.text.TextUtils
 import android.util.Log
 import org.victor.khttp.library.data.FormImage
 import java.io.*
@@ -245,5 +246,26 @@ class HttpUtil {
             } else true
 
         }
+
+        /**
+         * 检测网络是否经过了代理，防止网络抓包
+         * @param context
+         * @return
+         */
+        fun isWifiProxy(context: Context): Boolean {
+            var IS_ICS_OR_LATER = Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH;
+            var proxyAddress:String ;
+            var proxyPort:Int = -1 ;
+            if (IS_ICS_OR_LATER) {
+                proxyAddress = System.getProperty("http.proxyHost");
+                var portStr = System.getProperty("http.proxyPort");
+                proxyPort = Integer.parseInt(portStr);
+            } else {
+                proxyAddress = android.net.Proxy.getHost(context);
+                proxyPort = android.net.Proxy.getPort(context);
+            }
+            return (!TextUtils.isEmpty(proxyAddress)) && (proxyPort != -1);
+        }
     }
+
 }
