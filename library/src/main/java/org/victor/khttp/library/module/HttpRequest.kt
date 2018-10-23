@@ -27,7 +27,7 @@ import kotlin.reflect.KClass
  * -----------------------------------------------------------------
  */
 class HttpRequest () {
-    private val TAG = "HttpRequest"
+    private var TAG = "HttpRequest"
     private object Holder { val instance = HttpRequest()}
     private var mRequestHandler: Handler? = null
     private var mRequestHandlerThread: HandlerThread? = null
@@ -67,21 +67,35 @@ class HttpRequest () {
                     Constant.SEND_GET_REQUEST -> {
                         var result: String? = HttpUtil.get(requestUrl)
 //                        var reponse  = parseObject(result,responseCls!!.javaObjectType)
-                        var reponse  = parseObject(result,responseCls!!.java)
+                        var reponse:Any? = result
+                        Log.e("HttpRequest","responseCls = ${responseCls}")
+                        if (!responseCls!!.toString().contains("String")!!) {
+                            reponse  = parseObject(result,responseCls!!.java)
+                        }
                         MainHandler.runMainThread {
                             listener?.onComplete(reponse,"success")
                         }
                     }
                     Constant.SEND_POST_REQUEST -> {
                         val result: String? = HttpUtil.post(requestUrl,headers,parms)
+                        var reponse:Any? = result
+                        Log.e("HttpRequest","responseCls = ${responseCls}")
+                        if (!responseCls!!.toString().contains("String")!!) {
+                            reponse  = parseObject(result,responseCls!!.java)
+                        }
                         MainHandler.runMainThread {
-                            listener?.onComplete(result,"success")
+                            listener?.onComplete(reponse,"success")
                         }
                     }
                     Constant.MULTIPART_UPLOAD_REQUEST -> {
                         val result: String? = HttpUtil.upload(requestUrl,headers,formImage)
+                        var reponse:Any? = result
+                        Log.e("HttpRequest","responseCls = ${responseCls}")
+                        if (!responseCls!!.toString().contains("String")!!) {
+                            reponse  = parseObject(result,responseCls!!.java)
+                        }
                         MainHandler.runMainThread {
-                            listener?.onComplete(result,"success")
+                            listener?.onComplete(reponse,"success")
                         }
                     }
                 }
