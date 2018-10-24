@@ -15,6 +15,7 @@ class Constant {
         const val SEND_GET_REQUEST: Int           = 0x601
         const val SEND_POST_REQUEST: Int          = 0x602
         const val MULTIPART_UPLOAD_REQUEST : Int = 0x603
+        const val JSOUP_REQUEST : Int               = 0x604
 
         const val PAGE_SIZE: Int = 20
         const val GANK_URL: String = "https://gank.io/api/xiandu/categories"

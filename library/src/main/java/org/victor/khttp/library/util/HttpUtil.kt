@@ -9,6 +9,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.text.TextUtils
 import android.util.Log
+import org.jsoup.Jsoup
 import org.victor.khttp.library.data.FormImage
 import java.io.*
 import java.net.*
@@ -217,6 +218,14 @@ class HttpUtil {
                 e.printStackTrace()
             }
             return result
+        }
+
+        @Throws(SocketTimeoutException::class)
+        fun jsoup (requestUrl: String?): String {
+            var document = Jsoup.connect(requestUrl)
+                    .userAgent(USER_AGENT)
+                    .timeout(CONNECT_TIME_OUT).get();
+            return document.toString()
         }
         /**
          * 将图片转换为数组

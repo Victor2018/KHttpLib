@@ -98,6 +98,12 @@ class HttpRequest () {
                             listener?.onComplete(reponse,"success")
                         }
                     }
+                    Constant.JSOUP_REQUEST -> {
+                        val result: String? = HttpUtil.jsoup(requestUrl)
+                        MainHandler.runMainThread {
+                            listener?.onComplete(result,"success")
+                        }
+                    }
                 }
             }
         }
