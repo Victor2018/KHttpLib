@@ -110,9 +110,9 @@ class HttpRequest () {
     }
 
     fun sendPostRequest(url:String, headers: HashMap<String,String>?,parms:String?,listener :OnHttpListener?) {
-        Log.e(TAG,"sendRequest-requestUrl = ${url}")
-        Log.e(TAG,"sendRequest-headers = ${headers.toString()}")
-        Log.e(TAG,"sendRequest-parms = ${parms}")
+        Log.e(TAG,"sendPostRequest-requestUrl = ${url}")
+        Log.e(TAG,"sendPostRequest-headers = ${headers.toString()}")
+        Log.e(TAG,"sendPostRequest-parms = ${parms}")
         requestUrl = url;
         this.headers = headers
         this.parms = parms
@@ -122,10 +122,17 @@ class HttpRequest () {
     }
 
     fun sendGetRequest(url:String,listener :OnHttpListener?) {
-        Log.e(TAG,"sendRequest-requestUrl = ${url}")
+        Log.e(TAG,"sendGetRequest-requestUrl = ${url}")
         requestUrl = url;
         this.listener = listener
         var msg = mRequestHandler?.obtainMessage(Constant.SEND_GET_REQUEST)
+        mRequestHandler?.sendMessage(msg);
+    }
+    fun sendJsoupRequest(url:String,listener :OnHttpListener?) {
+        Log.e(TAG,"sendJsoupRequest-requestUrl = ${url}")
+        requestUrl = url;
+        this.listener = listener
+        var msg = mRequestHandler?.obtainMessage(Constant.JSOUP_REQUEST)
         mRequestHandler?.sendMessage(msg);
     }
 
@@ -136,6 +143,8 @@ class HttpRequest () {
             sendPostRequest(url,headers,parms,listener)
         }  else if (requestMethod == Request.UPLOAD) {
             sendMultipartUploadRequest(url,headers,formImage,listener)
+        }  else if (requestMethod == Request.JSOUP) {
+            sendJsoupRequest(url,listener)
         }
     }
 

@@ -15,5 +15,6 @@ package org.victor.khttp.library.data
         const val GET: Int  = 0
         const val POST: Int = 1
         const val UPLOAD: Int = 2
+        const val JSOUP: Int = 3
     }
 }
