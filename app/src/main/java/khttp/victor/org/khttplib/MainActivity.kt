@@ -12,11 +12,15 @@ import org.victor.khttp.library.module.HttpRequest
 import org.victor.khttp.library.util.Constant
 import android.app.Dialog
 import android.app.ProgressDialog
+import android.util.Log
 import android.view.View
 import khttp.victor.org.khttplib.data.PhoneCodeParm
 import khttp.victor.org.khttplib.data.PhoneCodeRequest
+import khttp.victor.org.khttplib.presenter.FacebookPresenterImpl
 import khttp.victor.org.khttplib.presenter.UploadPresenterImpl
+import khttp.victor.org.khttplib.view.FacebookView
 import khttp.victor.org.khttplib.view.UploadView
+import org.victor.khttp.library.data.FacebookReq
 import org.victor.khttp.library.data.FormImage
 
 /*
@@ -30,12 +34,18 @@ import org.victor.khttp.library.data.FormImage
  * -----------------------------------------------------------------
  */
 
-class MainActivity : AppCompatActivity(),View.OnClickListener,GankView, PhoneCodeView,UploadView {
+class MainActivity : AppCompatActivity(),View.OnClickListener,GankView, PhoneCodeView,UploadView,FacebookView {
     var TAG: String = "MainActivity"
     var gankPresenter: GankPresenterImpl? = null
     var phoneCodePresenter: PhoneCodePresenterImpl? = null
     var uploadPresenter: UploadPresenterImpl? = null
+    var facebookPresenter:FacebookPresenterImpl? = null
     var loadingDialog: Dialog? = null
+
+    override fun OnFacebook(data: FacebookReq?, msg: String) {
+        loadingDialog?.dismiss();
+        mTvResponse.setText(JSON.toJSONString(data))
+    }
 
     override fun OnGank(data: Any?, error: String) {
         loadingDialog?.dismiss();
@@ -64,10 +74,12 @@ class MainActivity : AppCompatActivity(),View.OnClickListener,GankView, PhoneCod
         gankPresenter = GankPresenterImpl(this)
         phoneCodePresenter = PhoneCodePresenterImpl(this)
         uploadPresenter = UploadPresenterImpl(this)
+        facebookPresenter = FacebookPresenterImpl(this)
 
         mBtnGet.setOnClickListener(this)
         mBtnPost.setOnClickListener(this)
         mBtnUploadImg.setOnClickListener(this)
+        mBtnJsoup.setOnClickListener(this)
     }
 
     fun sendGankRequest () {
@@ -107,6 +119,11 @@ class MainActivity : AppCompatActivity(),View.OnClickListener,GankView, PhoneCod
         uploadPresenter?.sendRequest(Constant.UPLOAD_IMG_URL, getHttpHeaderParm(), JSON.toJSONString(img))
     }
 
+    fun sendJsoupRequest () {
+        loadingDialog?.show();
+        facebookPresenter?.sendRequest(Constant.FACEBOOK_URL,null,null)
+    }
+
     fun getHttpHeaderParm(): HashMap<String, String> {
         val header = java.util.HashMap<String, String>()
         header["X-token"] = "6f7ac60289382df0309e5c00c43053f5"
@@ -121,12 +138,16 @@ class MainActivity : AppCompatActivity(),View.OnClickListener,GankView, PhoneCod
         when(view?.id) {
             R.id.mBtnGet ->{
                 sendGankRequest()
+
             }
             R.id.mBtnPost ->{
                 sendPhoneCode()
             }
             R.id.mBtnUploadImg ->{
                 sendUploadRequest()
+            }
+            R.id.mBtnJsoup ->{
+                sendJsoupRequest()
             }
         }
 

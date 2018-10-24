@@ -21,6 +21,7 @@ class Constant {
         const val GANK_URL: String = "https://gank.io/api/xiandu/categories"
         const val PHONE_CODE_URL: String = "http://api.zg.xiaoyoureliao.net/cgi-bin/get_phone_code"
         const val UPLOAD_IMG_URL: String = "http://ott.long.tv/v1/auth/avatar/upload"
+        const val FACEBOOK_URL: String = "https://www.facebook.com/1541202502800731/videos/1995585847362392/"
 
     }
 }
