@@ -90,6 +90,8 @@ class HttpUtil {
                 e.printStackTrace()
             } catch (e: ProtocolException) {
                 e.printStackTrace()
+            } catch (e: UnknownHostException) {
+                e.printStackTrace()
             } catch (e: IOException) {
                 e.printStackTrace()
             }
@@ -128,6 +130,8 @@ class HttpUtil {
                 inputStream.close()
                 bos.close()
             } catch (e: MalformedURLException) {
+                e.printStackTrace()
+            } catch (e: UnknownHostException) {
                 e.printStackTrace()
             } catch (e: IOException) {
                 e.printStackTrace()
@@ -213,6 +217,8 @@ class HttpUtil {
                 inputStream.close()
                 bos.close()
             } catch (e: MalformedURLException) {
+                e.printStackTrace()
+            } catch (e: UnknownHostException) {
                 e.printStackTrace()
             } catch (e: IOException) {
                 e.printStackTrace()
