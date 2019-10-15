@@ -9,12 +9,17 @@ import org.victor.khttp.library.util.Constant
 import org.victor.khttp.library.util.HttpUtil
 import java.util.HashMap
 import com.alibaba.fastjson.JSON
+import org.json.JSONArray
 import org.json.JSONException
+import org.json.JSONObject
 import org.victor.khttp.library.data.FormImage
 import org.victor.khttp.library.data.Request
 import org.victor.khttp.library.presenter.OnHttpListener
 import org.victor.khttp.library.util.MainHandler
 import kotlin.reflect.KClass
+import org.json.JSONTokener
+import java.lang.Exception
+
 
 /*
  * -----------------------------------------------------------------
@@ -28,6 +33,7 @@ import kotlin.reflect.KClass
  */
 class HttpRequest () {
     private var TAG = "HttpRequest"
+    val ARRAY_LIST_KEY = "ARRAY_LIST_KEY"
     private object Holder { val instance = HttpRequest()}
     private var mRequestHandler: Handler? = null
     private var mRequestHandlerThread: HandlerThread? = null
@@ -65,44 +71,16 @@ class HttpRequest () {
             override fun handleMessage(msg: Message) {
                 when (msg.what) {
                     Constant.SEND_GET_REQUEST -> {
-                        var result: String? = HttpUtil.get(requestUrl)
-//                        var reponse  = parseObject(result,responseCls!!.javaObjectType)
-                        var reponse:Any? = result
-                        Log.e("HttpRequest","responseCls = ${responseCls}")
-                        if (!responseCls!!.toString().contains("String")!!) {
-                            reponse  = parseObject(result,responseCls!!.java)
-                        }
-                        MainHandler.runMainThread {
-                            listener?.onComplete(reponse,"success")
-                        }
+                        onReponse(HttpUtil.get(requestUrl))
                     }
                     Constant.SEND_POST_REQUEST -> {
-                        val result: String? = HttpUtil.post(requestUrl,headers,parms)
-                        var reponse:Any? = result
-                        Log.e("HttpRequest","responseCls = ${responseCls}")
-                        if (!responseCls!!.toString().contains("String")!!) {
-                            reponse  = parseObject(result,responseCls!!.java)
-                        }
-                        MainHandler.runMainThread {
-                            listener?.onComplete(reponse,"success")
-                        }
+                        onReponse(HttpUtil.post(requestUrl,headers,parms))
                     }
                     Constant.MULTIPART_UPLOAD_REQUEST -> {
-                        val result: String? = HttpUtil.upload(requestUrl,headers,formImage)
-                        var reponse:Any? = result
-                        Log.e("HttpRequest","responseCls = ${responseCls}")
-                        if (!responseCls!!.toString().contains("String")!!) {
-                            reponse  = parseObject(result,responseCls!!.java)
-                        }
-                        MainHandler.runMainThread {
-                            listener?.onComplete(reponse,"success")
-                        }
+                        onReponse(HttpUtil.upload(requestUrl,headers,formImage))
                     }
                     Constant.JSOUP_REQUEST -> {
-                        val result: String? = HttpUtil.jsoup(requestUrl)
-                        MainHandler.runMainThread {
-                            listener?.onComplete(result,"success")
-                        }
+                        onReponse(HttpUtil.jsoup(requestUrl))
                     }
                 }
             }
@@ -172,6 +150,43 @@ class HttpRequest () {
             e.printStackTrace()
         }
         return null
+    }
+
+    inline fun <reified T: Any> parseArray(text: String?, clazz: Class<T>?): List<T>? {
+        try {
+            return JSON.parseArray(text, clazz)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+        return null
+    }
+
+    fun parseReponse (result: String): Any? {
+        var reponse:Any? = result
+        try {
+            if (responseCls!!.toString().contains("String")) {
+                return reponse
+            }
+            val json = JSONTokener(result).nextValue()
+            if (json is JSONObject) {
+                Log.e(TAG,"reponse data is JSONObject")
+//            reponse  = parseObject(result,responseCls!!.javaObjectType)
+                reponse  = parseObject(result,responseCls!!.java)
+            } else if (json is JSONArray) {
+                Log.e(TAG,"reponse data is JSONArray")
+                reponse = parseArray(result,responseCls!!.java)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        return reponse
+    }
+
+    fun onReponse(result: String?) {
+        MainHandler.runMainThread {
+            listener?.onComplete(parseReponse(result!!),"success")
+        }
     }
 
 }

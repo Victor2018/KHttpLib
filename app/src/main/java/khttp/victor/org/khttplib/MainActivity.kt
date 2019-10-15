@@ -22,6 +22,7 @@ import khttp.victor.org.khttplib.view.FacebookView
 import khttp.victor.org.khttplib.view.UploadView
 import org.victor.khttp.library.data.FacebookReq
 import org.victor.khttp.library.data.FormImage
+import org.victor.khttp.library.data.GankReq
 
 /*
  * -----------------------------------------------------------------
@@ -80,11 +81,13 @@ class MainActivity : AppCompatActivity(),View.OnClickListener,GankView, PhoneCod
         mBtnPost.setOnClickListener(this)
         mBtnUploadImg.setOnClickListener(this)
         mBtnJsoup.setOnClickListener(this)
+
     }
 
     fun sendGankRequest () {
         loadingDialog?.show();
         gankPresenter?.sendRequest(Constant.GANK_URL,null,null)
+//        gankPresenter?.sendRequest("https://baobab.kaiyanapp.com/api/v4/categories?udid=0890f96bf4d6cbad787192cb9ce83b2b&deviceModel=EML-AL00",null,null)
     }
 
     fun sendPhoneCode() {
