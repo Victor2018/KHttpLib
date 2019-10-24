@@ -38,7 +38,6 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     //fastjson库
     implementation 'com.alibaba:fastjson:1.1.56.android'
-    implementation files('libs/jsoup-1.11.3.jar')
 }
 repositories {
     mavenCentral()

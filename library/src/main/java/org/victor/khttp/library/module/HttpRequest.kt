@@ -79,9 +79,6 @@ class HttpRequest () {
                     Constant.MULTIPART_UPLOAD_REQUEST -> {
                         onReponse(HttpUtil.upload(requestUrl,headers,formImage))
                     }
-                    Constant.JSOUP_REQUEST -> {
-                        onReponse(HttpUtil.jsoup(requestUrl))
-                    }
                 }
             }
         }
@@ -106,13 +103,6 @@ class HttpRequest () {
         var msg = mRequestHandler?.obtainMessage(Constant.SEND_GET_REQUEST)
         mRequestHandler?.sendMessage(msg);
     }
-    fun sendJsoupRequest(url:String,listener :OnHttpListener?) {
-        Log.e(TAG,"sendJsoupRequest-requestUrl = ${url}")
-        requestUrl = url;
-        this.listener = listener
-        var msg = mRequestHandler?.obtainMessage(Constant.JSOUP_REQUEST)
-        mRequestHandler?.sendMessage(msg);
-    }
 
     fun sendRequest (url:String, headers: HashMap<String,String>?,parms:String?,formImage: FormImage?,listener :OnHttpListener?) {
         if (requestMethod == Request.GET) {
@@ -121,8 +111,6 @@ class HttpRequest () {
             sendPostRequest(url,headers,parms,listener)
         }  else if (requestMethod == Request.UPLOAD) {
             sendMultipartUploadRequest(url,headers,formImage,listener)
-        }  else if (requestMethod == Request.JSOUP) {
-            sendJsoupRequest(url,listener)
         }
     }
 

@@ -33,13 +33,6 @@
             android:layout_weight="1"
             android:text="UploadImg"
             android:textAllCaps="false"/>
-        <Button
-            android:id="@+id/mBtnJsoup"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Jsoup"
-            android:textAllCaps="false"/>
 
     </LinearLayout>
     <TextView

@@ -80,14 +80,12 @@ class MainActivity : AppCompatActivity(),View.OnClickListener,GankView, PhoneCod
         mBtnGet.setOnClickListener(this)
         mBtnPost.setOnClickListener(this)
         mBtnUploadImg.setOnClickListener(this)
-        mBtnJsoup.setOnClickListener(this)
 
     }
 
     fun sendGankRequest () {
         loadingDialog?.show();
         gankPresenter?.sendRequest(Constant.GANK_URL,null,null)
-//        gankPresenter?.sendRequest("https://baobab.kaiyanapp.com/api/v4/categories?udid=0890f96bf4d6cbad787192cb9ce83b2b&deviceModel=EML-AL00",null,null)
     }
 
     fun sendPhoneCode() {
@@ -148,9 +146,6 @@ class MainActivity : AppCompatActivity(),View.OnClickListener,GankView, PhoneCod
             }
             R.id.mBtnUploadImg ->{
                 sendUploadRequest()
-            }
-            R.id.mBtnJsoup ->{
-                sendJsoupRequest()
             }
         }
 
