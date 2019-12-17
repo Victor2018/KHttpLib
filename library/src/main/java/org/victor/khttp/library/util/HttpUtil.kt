@@ -37,7 +37,7 @@ class HttpUtil {
 
         @TargetApi(Build.VERSION_CODES.KITKAT)
         fun post(requestUrl: String?, header:HashMap<String,String>?,parms: String?): String {
-            var result:String = ""
+            var result = ""
             try {
                 var url = URL(requestUrl)
                 var conn:HttpURLConnection = url.openConnection() as HttpURLConnection
@@ -85,14 +85,19 @@ class HttpUtil {
                 bos.close()
             } catch (e: MalformedURLException) {
                 e.printStackTrace()
+                result = e.message.toString()
             } catch (e: UnsupportedEncodingException) {
                 e.printStackTrace()
+                result = e.message.toString()
             } catch (e: ProtocolException) {
                 e.printStackTrace()
+                result = e.message.toString()
             } catch (e: UnknownHostException) {
                 e.printStackTrace()
+                result = e.message.toString()
             } catch (e: IOException) {
                 e.printStackTrace()
+                result = e.message.toString()
             }
             Log.e(TAG,"post-responseData = ${result}")
             return result
@@ -130,15 +135,23 @@ class HttpUtil {
                 bos.close()
             } catch (e: MalformedURLException) {
                 e.printStackTrace()
+                result = e.message.toString()
+            } catch (e: UnsupportedEncodingException) {
+                e.printStackTrace()
+                result = e.message.toString()
+            } catch (e: ProtocolException) {
+                e.printStackTrace()
+                result = e.message.toString()
             } catch (e: UnknownHostException) {
                 e.printStackTrace()
+                result = e.message.toString()
             } catch (e: IOException) {
                 e.printStackTrace()
+                result = e.message.toString()
             }
             Log.e(TAG,"get-responseData = ${result}")
             return result
         }
-        @Throws(SocketTimeoutException::class)
         fun upload(requestUrl:String?, header: HashMap<String,String>?,formImage: FormImage?): String ? {
             var result:String? = null
             val CONTENT_TYPE = "multipart/form-data" //内容类型
@@ -217,10 +230,19 @@ class HttpUtil {
                 bos.close()
             } catch (e: MalformedURLException) {
                 e.printStackTrace()
+                result = e.message.toString()
+            } catch (e: UnsupportedEncodingException) {
+                e.printStackTrace()
+                result = e.message.toString()
+            } catch (e: ProtocolException) {
+                e.printStackTrace()
+                result = e.message.toString()
             } catch (e: UnknownHostException) {
                 e.printStackTrace()
+                result = e.message.toString()
             } catch (e: IOException) {
                 e.printStackTrace()
+                result = e.message.toString()
             }
             return result
         }

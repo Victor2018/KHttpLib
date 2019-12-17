@@ -51,6 +51,9 @@ class MainActivity : AppCompatActivity(),View.OnClickListener,GankView, PhoneCod
     override fun OnGank(data: Any?, error: String) {
         loadingDialog?.dismiss();
         mTvResponse.setText(JSON.toJSONString(data))
+        if (data == null) {
+            mTvResponse.setText(error)
+        }
     }
 
     override fun OnPhoneCode(data: Any?, error: String) {
@@ -139,7 +142,6 @@ class MainActivity : AppCompatActivity(),View.OnClickListener,GankView, PhoneCod
         when(view?.id) {
             R.id.mBtnGet ->{
                 sendGankRequest()
-
             }
             R.id.mBtnPost ->{
                 sendPhoneCode()

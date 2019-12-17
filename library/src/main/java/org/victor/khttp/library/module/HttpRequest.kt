@@ -19,6 +19,7 @@ import org.victor.khttp.library.util.MainHandler
 import kotlin.reflect.KClass
 import org.json.JSONTokener
 import java.lang.Exception
+import java.util.ArrayList
 
 
 /*
@@ -42,7 +43,7 @@ class HttpRequest () {
     private var parms: String? = null
     private var formImage: FormImage? = null
 
-    private var listener : OnHttpListener? = null
+    private var listeners = ArrayList<OnHttpListener>()
     private var requestMethod: Int = Request.GET
     private var responseCls: KClass<Any>?= null
 
@@ -91,7 +92,7 @@ class HttpRequest () {
         requestUrl = url;
         this.headers = headers
         this.parms = parms
-        this.listener = listener
+        this.listeners.add(listener!!)
         val msg = mRequestHandler?.obtainMessage(Constant.SEND_POST_REQUEST)
         mRequestHandler?.sendMessage(msg)
     }
@@ -99,7 +100,7 @@ class HttpRequest () {
     fun sendGetRequest(url:String,listener :OnHttpListener?) {
         Log.e(TAG,"sendGetRequest-requestUrl = ${url}")
         requestUrl = url;
-        this.listener = listener
+        this.listeners.add(listener!!)
         var msg = mRequestHandler?.obtainMessage(Constant.SEND_GET_REQUEST)
         mRequestHandler?.sendMessage(msg);
     }
@@ -121,12 +122,13 @@ class HttpRequest () {
         requestUrl = url
         this.headers = headers
         this.formImage = formImage
-        this.listener = listener
+        this.listeners.add(listener!!)
         var msg = mRequestHandler?.obtainMessage(Constant.MULTIPART_UPLOAD_REQUEST)
         mRequestHandler?.sendMessage(msg);
     }
 
     fun onDestroy() {
+        listeners.clear()
         mRequestHandlerThread?.quit()
         mRequestHandlerThread = null
     }
@@ -150,7 +152,7 @@ class HttpRequest () {
     }
 
     fun parseReponse (result: String): Any? {
-        var reponse:Any? = result
+        var reponse:Any? = null
         try {
             if (responseCls!!.toString().contains("String")) {
                 return reponse
@@ -173,7 +175,12 @@ class HttpRequest () {
 
     fun onReponse(result: String?) {
         MainHandler.runMainThread {
-            listener?.onComplete(parseReponse(result!!),"success")
+            var reponse:Any? = parseReponse(result!!)
+            if (listeners == null) return@runMainThread
+            if (listeners.size == 0) return@runMainThread
+            for (listener in listeners) {
+                listener.onComplete(reponse,result)
+            }
         }
     }
 
