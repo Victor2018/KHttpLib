@@ -11,5 +11,5 @@ package khttp.victor.org.khttplib.view
  * -----------------------------------------------------------------
  */
 interface PhoneCodeView {
-    fun OnPhoneCode (data: Any?,error: String)
+    fun OnPhoneCode (data: Any?,error: String?)
 }

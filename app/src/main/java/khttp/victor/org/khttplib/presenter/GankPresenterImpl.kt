@@ -5,6 +5,7 @@ import org.victor.khttp.library.annotation.HttpParms
 import org.victor.khttp.library.data.GankReq
 import org.victor.khttp.library.data.Request
 import org.victor.khttp.library.inject.HttpInject
+import org.victor.khttp.library.module.HttpRequest
 import org.victor.khttp.library.presenter.impl.BasePresenterImpl
 
 /*
@@ -19,7 +20,7 @@ import org.victor.khttp.library.presenter.impl.BasePresenterImpl
  */
 class GankPresenterImpl(var gankView: GankView?): BasePresenterImpl() {
 
-    override fun onComplete(data: Any?, msg: String) {
+    override fun onComplete(data: Any?, msg: String?) {
         gankView?.OnGank(data,msg)
     }
 

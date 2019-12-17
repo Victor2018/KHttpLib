@@ -19,7 +19,6 @@ import org.victor.khttp.library.util.MainHandler
 import kotlin.reflect.KClass
 import org.json.JSONTokener
 import java.lang.Exception
-import java.util.ArrayList
 
 
 /*
@@ -40,12 +39,14 @@ class HttpRequest () {
     private var mRequestHandlerThread: HandlerThread? = null
     private var requestUrl: String? = null
     private var headers: HashMap<String,String>? = null
+    var requests= HashMap<String,Request>()
     private var parms: String? = null
     private var formImage: FormImage? = null
 
-    private var listeners = ArrayList<OnHttpListener>()
     private var requestMethod: Int = Request.GET
     private var responseCls: KClass<Any>?= null
+
+
 
 
     companion object {
@@ -72,40 +73,21 @@ class HttpRequest () {
             override fun handleMessage(msg: Message) {
                 when (msg.what) {
                     Constant.SEND_GET_REQUEST -> {
-                        onReponse(HttpUtil.get(requestUrl))
+                        onReponse(requestUrl,HttpUtil.get(requestUrl))
                     }
                     Constant.SEND_POST_REQUEST -> {
-                        onReponse(HttpUtil.post(requestUrl,headers,parms))
+                        onReponse(requestUrl,HttpUtil.post(requestUrl,headers,parms))
                     }
                     Constant.MULTIPART_UPLOAD_REQUEST -> {
-                        onReponse(HttpUtil.upload(requestUrl,headers,formImage))
+                        onReponse(requestUrl,HttpUtil.upload(requestUrl,headers,formImage))
                     }
                 }
             }
         }
     }
 
-    fun sendPostRequest(url:String, headers: HashMap<String,String>?,parms:String?,listener :OnHttpListener?) {
-        Log.e(TAG,"sendPostRequest-requestUrl = ${url}")
-        Log.e(TAG,"sendPostRequest-headers = ${headers.toString()}")
-        Log.e(TAG,"sendPostRequest-parms = ${parms}")
-        requestUrl = url;
-        this.headers = headers
-        this.parms = parms
-        this.listeners.add(listener!!)
-        val msg = mRequestHandler?.obtainMessage(Constant.SEND_POST_REQUEST)
-        mRequestHandler?.sendMessage(msg)
-    }
-
-    fun sendGetRequest(url:String,listener :OnHttpListener?) {
-        Log.e(TAG,"sendGetRequest-requestUrl = ${url}")
-        requestUrl = url;
-        this.listeners.add(listener!!)
-        var msg = mRequestHandler?.obtainMessage(Constant.SEND_GET_REQUEST)
-        mRequestHandler?.sendMessage(msg);
-    }
-
     fun sendRequest (url:String, headers: HashMap<String,String>?,parms:String?,formImage: FormImage?,listener :OnHttpListener?) {
+        requests?.put(url, Request(requestMethod,responseCls,listener))
         if (requestMethod == Request.GET) {
             sendGetRequest(url,listener)
         } else if (requestMethod == Request.POST) {
@@ -115,6 +97,24 @@ class HttpRequest () {
         }
     }
 
+    fun sendGetRequest(url:String,listener :OnHttpListener?) {
+        Log.e(TAG,"sendGetRequest-requestUrl = ${url}")
+        requestUrl = url;
+        var msg = mRequestHandler?.obtainMessage(Constant.SEND_GET_REQUEST)
+        mRequestHandler?.sendMessage(msg);
+    }
+
+    fun sendPostRequest(url:String, headers: HashMap<String,String>?,parms:String?,listener :OnHttpListener?) {
+        Log.e(TAG,"sendPostRequest-requestUrl = ${url}")
+        Log.e(TAG,"sendPostRequest-headers = ${headers.toString()}")
+        Log.e(TAG,"sendPostRequest-parms = ${parms}")
+        requestUrl = url;
+        this.headers = headers
+        this.parms = parms
+        val msg = mRequestHandler?.obtainMessage(Constant.SEND_POST_REQUEST)
+        mRequestHandler?.sendMessage(msg)
+    }
+
     fun sendMultipartUploadRequest (url:String, headers: HashMap<String,String>?,formImage: FormImage?,listener :OnHttpListener?) {
         Log.e(TAG,"sendMultipartUploadRequest-requestUrl = ${url}")
         Log.e(TAG,"sendMultipartUploadRequest-headers = ${headers.toString()}")
@@ -122,13 +122,11 @@ class HttpRequest () {
         requestUrl = url
         this.headers = headers
         this.formImage = formImage
-        this.listeners.add(listener!!)
         var msg = mRequestHandler?.obtainMessage(Constant.MULTIPART_UPLOAD_REQUEST)
         mRequestHandler?.sendMessage(msg);
     }
 
     fun onDestroy() {
-        listeners.clear()
         mRequestHandlerThread?.quit()
         mRequestHandlerThread = null
     }
@@ -151,10 +149,10 @@ class HttpRequest () {
         return null
     }
 
-    fun parseReponse (result: String): Any? {
+    fun parseReponse (url:String?, result: String?): Any? {
         var reponse:Any? = null
         try {
-            if (responseCls!!.toString().contains("String")) {
+            if (requests.get(url)?.responseCls!!.toString().contains("String")) {
                 Log.e(TAG,"reponse data is String")
                 if (TextUtils.isEmpty(result)) {
                     return null
@@ -165,10 +163,10 @@ class HttpRequest () {
             if (json is JSONObject) {
                 Log.e(TAG,"reponse data is JSONObject")
 //            reponse  = parseObject(result,responseCls!!.javaObjectType)
-                reponse  = parseObject(result,responseCls!!.java)
+                reponse  = parseObject(result,requests.get(url)?.responseCls!!.java)
             } else if (json is JSONArray) {
                 Log.e(TAG,"reponse data is JSONArray")
-                reponse = parseArray(result,responseCls!!.java)
+                reponse = parseArray(result,requests.get(url)?.responseCls!!.java)
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -177,15 +175,12 @@ class HttpRequest () {
         return reponse
     }
 
-    fun onReponse(result: String?) {
+    fun onReponse(url:String?,result: String?) {
         MainHandler.runMainThread {
-            var reponse:Any? = parseReponse(result!!)
+            var reponse:Any? = parseReponse(url,result)
             Log.e(TAG,"onReponse-reponse = $reponse")
-            if (listeners == null) return@runMainThread
-            if (listeners.size == 0) return@runMainThread
-            for (listener in listeners) {
-                listener.onComplete(reponse,result)
-            }
+            requests.get(url)?.listener?.onComplete(reponse,result)
+            requests.remove(url)
         }
     }
 

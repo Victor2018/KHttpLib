@@ -11,5 +11,5 @@ package org.victor.khttp.library.presenter
  * -----------------------------------------------------------------
  */
 interface OnHttpListener {
-    fun onComplete(data: Any?, msg: String)
+    fun onComplete(data: Any?, msg: String?)
 }

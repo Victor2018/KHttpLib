@@ -1,5 +1,8 @@
 package org.victor.khttp.library.data
 
+import org.victor.khttp.library.presenter.OnHttpListener
+import kotlin.reflect.KClass
+
 /*
  * -----------------------------------------------------------------
  * Copyright (C) 2018-2028, by Victor, All rights reserved.
@@ -10,7 +13,8 @@ package org.victor.khttp.library.data
  * Description: 请求方式实体
  * -----------------------------------------------------------------
  */
- class Request {
+ class Request(var requestMethod: Int,var responseCls: KClass<Any>?,var listener: OnHttpListener?) {
+
     companion object {
         const val GET: Int  = 0
         const val POST: Int = 1

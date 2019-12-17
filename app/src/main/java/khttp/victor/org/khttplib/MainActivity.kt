@@ -12,6 +12,7 @@ import org.victor.khttp.library.module.HttpRequest
 import org.victor.khttp.library.util.Constant
 import android.app.Dialog
 import android.app.ProgressDialog
+import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import khttp.victor.org.khttplib.data.PhoneCodeParm
@@ -23,6 +24,7 @@ import khttp.victor.org.khttplib.view.UploadView
 import org.victor.khttp.library.data.FacebookReq
 import org.victor.khttp.library.data.FormImage
 import org.victor.khttp.library.data.GankReq
+import org.victor.khttp.library.util.Constant.Companion.GANK_URL
 
 /*
  * -----------------------------------------------------------------
@@ -43,12 +45,13 @@ class MainActivity : AppCompatActivity(),View.OnClickListener,GankView, PhoneCod
     var facebookPresenter:FacebookPresenterImpl? = null
     var loadingDialog: Dialog? = null
 
-    override fun OnFacebook(data: FacebookReq?, msg: String) {
+    override fun OnFacebook(data: FacebookReq?, msg: String?) {
         loadingDialog?.dismiss();
         mTvResponse.setText(JSON.toJSONString(data))
     }
 
-    override fun OnGank(data: Any?, error: String) {
+    override fun OnGank(data: Any?, error: String?) {
+        Log.e(TAG,"OnGank()......")
         loadingDialog?.dismiss();
         mTvResponse.setText(JSON.toJSONString(data))
         if (data == null) {
@@ -56,12 +59,13 @@ class MainActivity : AppCompatActivity(),View.OnClickListener,GankView, PhoneCod
         }
     }
 
-    override fun OnPhoneCode(data: Any?, error: String) {
+    override fun OnPhoneCode(data: Any?, error: String?) {
+        Log.e(TAG,"OnPhoneCode()......")
         loadingDialog?.dismiss();
         mTvResponse.setText(JSON.toJSONString(data))
     }
 
-    override fun OnUpload(data: Any?, error: String) {
+    override fun OnUpload(data: Any?, error: String?) {
         loadingDialog?.dismiss();
         mTvResponse.setText(JSON.toJSONString(data))
     }
@@ -88,7 +92,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener,GankView, PhoneCod
 
     fun sendGankRequest () {
         loadingDialog?.show();
-        gankPresenter?.sendRequest(" https://baobab.kaiyanapp.com/api/v4/categories?udid=9fb9c65a6c69cc95a24f0f5103bcc5bc&deviceModel=Pixel",null,null)
+        gankPresenter?.sendRequest(GANK_URL,null,null)
     }
 
     fun sendPhoneCode() {
@@ -142,6 +146,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener,GankView, PhoneCod
         when(view?.id) {
             R.id.mBtnGet ->{
                 sendGankRequest()
+                sendPhoneCode()
             }
             R.id.mBtnPost ->{
                 sendPhoneCode()
