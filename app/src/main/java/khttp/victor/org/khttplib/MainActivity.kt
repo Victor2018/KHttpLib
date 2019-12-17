@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener,GankView, PhoneCod
 
     fun sendGankRequest () {
         loadingDialog?.show();
-        gankPresenter?.sendRequest(Constant.GANK_URL,null,null)
+        gankPresenter?.sendRequest(" https://baobab.kaiyanapp.com/api/v4/categories?udid=9fb9c65a6c69cc95a24f0f5103bcc5bc&deviceModel=Pixel",null,null)
     }
 
     fun sendPhoneCode() {

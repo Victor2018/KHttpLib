@@ -155,7 +155,11 @@ class HttpRequest () {
         var reponse:Any? = null
         try {
             if (responseCls!!.toString().contains("String")) {
-                return reponse
+                Log.e(TAG,"reponse data is String")
+                if (TextUtils.isEmpty(result)) {
+                    return null
+                }
+                return result
             }
             val json = JSONTokener(result).nextValue()
             if (json is JSONObject) {
@@ -176,6 +180,7 @@ class HttpRequest () {
     fun onReponse(result: String?) {
         MainHandler.runMainThread {
             var reponse:Any? = parseReponse(result!!)
+            Log.e(TAG,"onReponse-reponse = $reponse")
             if (listeners == null) return@runMainThread
             if (listeners.size == 0) return@runMainThread
             for (listener in listeners) {
