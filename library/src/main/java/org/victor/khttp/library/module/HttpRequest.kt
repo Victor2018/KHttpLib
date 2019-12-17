@@ -89,22 +89,22 @@ class HttpRequest () {
     fun sendRequest (url:String, headers: HashMap<String,String>?,parms:String?,formImage: FormImage?,listener :OnHttpListener?) {
         requests?.put(url, Request(requestMethod,responseCls,listener))
         if (requestMethod == Request.GET) {
-            sendGetRequest(url,listener)
+            sendGetRequest(url)
         } else if (requestMethod == Request.POST) {
-            sendPostRequest(url,headers,parms,listener)
+            sendPostRequest(url,headers,parms)
         }  else if (requestMethod == Request.UPLOAD) {
-            sendMultipartUploadRequest(url,headers,formImage,listener)
+            sendMultipartUploadRequest(url,headers,formImage)
         }
     }
 
-    fun sendGetRequest(url:String,listener :OnHttpListener?) {
+    fun sendGetRequest(url:String) {
         Log.e(TAG,"sendGetRequest-requestUrl = ${url}")
         requestUrl = url;
         var msg = mRequestHandler?.obtainMessage(Constant.SEND_GET_REQUEST)
         mRequestHandler?.sendMessage(msg);
     }
 
-    fun sendPostRequest(url:String, headers: HashMap<String,String>?,parms:String?,listener :OnHttpListener?) {
+    fun sendPostRequest(url:String, headers: HashMap<String,String>?,parms:String?) {
         Log.e(TAG,"sendPostRequest-requestUrl = ${url}")
         Log.e(TAG,"sendPostRequest-headers = ${headers.toString()}")
         Log.e(TAG,"sendPostRequest-parms = ${parms}")
@@ -115,7 +115,7 @@ class HttpRequest () {
         mRequestHandler?.sendMessage(msg)
     }
 
-    fun sendMultipartUploadRequest (url:String, headers: HashMap<String,String>?,formImage: FormImage?,listener :OnHttpListener?) {
+    fun sendMultipartUploadRequest (url:String, headers: HashMap<String,String>?,formImage: FormImage?) {
         Log.e(TAG,"sendMultipartUploadRequest-requestUrl = ${url}")
         Log.e(TAG,"sendMultipartUploadRequest-headers = ${headers.toString()}")
         Log.e(TAG,"sendMultipartUploadRequest-parms = ${JSON.toJSONString(formImage)}")
@@ -179,7 +179,7 @@ class HttpRequest () {
         MainHandler.runMainThread {
             var reponse:Any? = parseReponse(url,result)
             Log.e(TAG,"onReponse-reponse = $reponse")
-            requests.get(url)?.listener?.onComplete(reponse,result)
+            requests.get(url)?.listener?.onComplete(reponse,result!!)
             requests.remove(url)
         }
     }

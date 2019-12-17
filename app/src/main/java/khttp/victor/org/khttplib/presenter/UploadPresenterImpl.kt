@@ -18,7 +18,7 @@ import org.victor.khttp.library.presenter.impl.BaseUploadPresenterImpl
  * -----------------------------------------------------------------
  */
 class UploadPresenterImpl (var uploadView: UploadView?) : BaseUploadPresenterImpl() {
-    override fun onComplete(data: Any?, msg: String?) {
+    override fun onComplete(data: Any?, msg: String) {
         uploadView?.OnUpload(data,msg)
     }
     override fun detachView() {

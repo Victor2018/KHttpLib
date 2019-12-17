@@ -45,12 +45,12 @@ class MainActivity : AppCompatActivity(),View.OnClickListener,GankView, PhoneCod
     var facebookPresenter:FacebookPresenterImpl? = null
     var loadingDialog: Dialog? = null
 
-    override fun OnFacebook(data: FacebookReq?, msg: String?) {
+    override fun OnFacebook(data: FacebookReq?, msg: String) {
         loadingDialog?.dismiss();
         mTvResponse.setText(JSON.toJSONString(data))
     }
 
-    override fun OnGank(data: Any?, error: String?) {
+    override fun OnGank(data: Any?, error: String) {
         Log.e(TAG,"OnGank()......")
         loadingDialog?.dismiss();
         mTvResponse.setText(JSON.toJSONString(data))
@@ -59,13 +59,13 @@ class MainActivity : AppCompatActivity(),View.OnClickListener,GankView, PhoneCod
         }
     }
 
-    override fun OnPhoneCode(data: Any?, error: String?) {
+    override fun OnPhoneCode(data: Any?, error: String) {
         Log.e(TAG,"OnPhoneCode()......")
         loadingDialog?.dismiss();
         mTvResponse.setText(JSON.toJSONString(data))
     }
 
-    override fun OnUpload(data: Any?, error: String?) {
+    override fun OnUpload(data: Any?, error: String) {
         loadingDialog?.dismiss();
         mTvResponse.setText(JSON.toJSONString(data))
     }
@@ -146,7 +146,6 @@ class MainActivity : AppCompatActivity(),View.OnClickListener,GankView, PhoneCod
         when(view?.id) {
             R.id.mBtnGet ->{
                 sendGankRequest()
-                sendPhoneCode()
             }
             R.id.mBtnPost ->{
                 sendPhoneCode()

@@ -13,5 +13,5 @@ import org.victor.khttp.library.data.FacebookReq
  * -----------------------------------------------------------------
  */
 interface FacebookView {
-    fun OnFacebook (data: FacebookReq?,msg: String?)
+    fun OnFacebook (data: FacebookReq?,msg: String)
 }

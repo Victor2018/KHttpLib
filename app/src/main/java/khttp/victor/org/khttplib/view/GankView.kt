@@ -11,5 +11,5 @@ package khttp.victor.org.khttplib.view
  * -----------------------------------------------------------------
  */
 interface GankView {
-    fun OnGank (data: Any?,error: String?)
+    fun OnGank (data: Any?,error: String)
 }

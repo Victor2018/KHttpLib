@@ -20,7 +20,7 @@ import org.victor.khttp.library.presenter.impl.BasePresenterImpl
  */
 class GankPresenterImpl(var gankView: GankView?): BasePresenterImpl() {
 
-    override fun onComplete(data: Any?, msg: String?) {
+    override fun onComplete(data: Any?, msg: String) {
         gankView?.OnGank(data,msg)
     }
 

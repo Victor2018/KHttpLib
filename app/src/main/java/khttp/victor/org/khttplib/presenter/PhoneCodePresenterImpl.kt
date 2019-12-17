@@ -19,7 +19,7 @@ import org.victor.khttp.library.presenter.impl.BasePresenterImpl
  */
 class PhoneCodePresenterImpl(var phoneCodeView: PhoneCodeView?): BasePresenterImpl() {
 
-    override fun onComplete(data: Any?, msg: String?) {
+    override fun onComplete(data: Any?, msg: String) {
         phoneCodeView?.OnPhoneCode(data,msg)
     }
 

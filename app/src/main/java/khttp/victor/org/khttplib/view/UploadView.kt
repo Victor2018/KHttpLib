@@ -11,5 +11,5 @@ package khttp.victor.org.khttplib.view
  * -----------------------------------------------------------------
  */
 interface UploadView {
-    fun OnUpload (data: Any?,error: String?)
+    fun OnUpload (data: Any?,error: String)
 }

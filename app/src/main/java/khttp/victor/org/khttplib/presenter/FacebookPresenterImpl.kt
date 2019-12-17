@@ -18,7 +18,7 @@ import org.victor.khttp.library.presenter.impl.BasePresenterImpl
  * -----------------------------------------------------------------
  */
 class FacebookPresenterImpl(var facebookView: FacebookView?): BasePresenterImpl() {
-    override fun onComplete(data: Any?, msg: String?) {
+    override fun onComplete(data: Any?, msg: String) {
         var facebookReq = FacebookParser.parseFacebook(data?.toString())
         facebookView?.OnFacebook(facebookReq,msg)
     }
