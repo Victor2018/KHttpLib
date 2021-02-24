@@ -1,5 +1,7 @@
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+}
 
 // JitPack Maven
 apply plugin: 'com.github.dcendents.android-maven'
@@ -7,38 +9,76 @@ apply plugin: 'com.github.dcendents.android-maven'
 group='com.github.Victor2018'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
-        minSdkVersion 15
-        targetSdkVersion 28
+        minSdkVersion 16
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
     }
 
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:28.0.0-rc01'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    //kotlin库
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    //fastjson库
-    implementation 'com.alibaba:fastjson:1.1.56.android'
-}
-repositories {
-    mavenCentral()
+
+    api fileTree(dir: "libs", include: ["*.jar"])
+
+    api deps.kotlin.stdlib
+    api deps.basic.app_compat
+    api deps.basic.constraint_layout
+    api deps.basic.material
+    api deps.basic.recyclerview
+    api deps.basic.cardview
+
+    testApi deps.basic.junit
+
+    androidTestApi deps.atsl.runner
+    androidTestApi deps.atsl.rules
+    androidTestApi deps.atsl.ext_junit
+    androidTestApi deps.espresso.core
+    androidTestApi deps.espresso.contrib
+
+    //lifecycle
+    api deps.lifecycle.runtime
+    api deps.lifecycle.viewmodel_ktx
+    api deps.lifecycle.livedata_ktx
+
+    //ktx
+    api deps.ktx.core
+    api deps.ktx.activity
+    api deps.ktx.fragment
+
+    //协程
+    api deps.coroutines.core
+    api deps.coroutines.android
+    testApi deps.coroutines.test
+
+    //网络请求
+    api deps.retrofit.core
+//    api deps.retrofit.retrofit_converter_gson //已替换为fastjson解析
+    api deps.okhttp3.core
+    api deps.okhttp3.logging
+    api deps.fastjson.core
+
+
+
 }

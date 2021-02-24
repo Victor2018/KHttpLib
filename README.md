@@ -1,5 +1,5 @@
 # KHttpLib
-# 一个kotlin + fastjson + HandlerThread + 自定义注解 实现的网络请求库
+# 一个kotlin + coroutines 实现的网络请求库
 
 Usage
 
@@ -14,7 +14,7 @@ allprojects {
 - Step 2. Add the dependency
 
 dependencies {
-    compile 'com.github.Victor2018:KHttpLib:v1.0'
+    compile 'com.github.Victor2018:KHttpLib:latestVersion'
 }
 
 - Step 3. Add google pay lib in build.gradle of app and sync project
