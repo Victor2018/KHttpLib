@@ -1,12 +1,10 @@
 package org.victor.http.vm.factory
 
-import android.os.Bundle
-import androidx.lifecycle.AbstractSavedStateViewModelFactory
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.savedstate.SavedStateRegistryOwner
 import kotlinx.coroutines.Dispatchers
 import org.victor.http.datasource.GankGirlDataSource
+import org.victor.http.lib.vm.BaseVMFactory
 import org.victor.http.vm.GankGirlVm
 
 
@@ -20,17 +18,10 @@ import org.victor.http.vm.GankGirlVm
  * Description: 
  * -----------------------------------------------------------------
  */
-class GankGirlVMFactory(
-    owner: SavedStateRegistryOwner,
-    defaultArgs: Bundle? = null
-) : AbstractSavedStateViewModelFactory(owner, defaultArgs) {
+class GankGirlVMFactory(owner: SavedStateRegistryOwner) : BaseVMFactory(owner) {
 
-    @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel?> create(
-        key: String,
-        modelClass: Class<T>,
-        handle: SavedStateHandle
-    ): T {
-        return GankGirlVm(GankGirlDataSource(Dispatchers.IO)) as T
+    override fun getVM(): ViewModel {
+        return GankGirlVm(GankGirlDataSource(Dispatchers.IO))
     }
+
 }
