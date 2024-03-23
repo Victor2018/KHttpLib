@@ -23,7 +23,5 @@ import retrofit2.http.Query
 interface GankApiService {
 
     @GET(WebConfig.GANK_GIRL)
-    suspend fun fetchGankGirl(
-            @Path("page") page: Int = 0,
-            @Path("count") count: Int?): NetworkResponse<GankDetailEntity, HttpError>
+    suspend fun fetchGankGirl(): NetworkResponse<GankDetailEntity, HttpError>
 }

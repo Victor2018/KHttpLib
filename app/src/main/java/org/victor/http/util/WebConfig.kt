@@ -12,5 +12,5 @@ package org.victor.http.util
  * -----------------------------------------------------------------
  */
 object WebConfig {
-    const val GANK_GIRL = "data/category/Girl/type/Girl/page/{page}/count/{count}"
+    const val GANK_GIRL = "banner/json"
 }

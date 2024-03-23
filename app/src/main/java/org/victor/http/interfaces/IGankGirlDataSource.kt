@@ -17,5 +17,5 @@ import org.victor.http.lib.data.HttpResult
  */
 interface IGankGirlDataSource {
     val gankGirlData: LiveData<HttpResult<GankDetailEntity>>
-    suspend fun fetchGankGirl(page: Int,pageSize: Int)
+    suspend fun fetchGankGirl()
 }

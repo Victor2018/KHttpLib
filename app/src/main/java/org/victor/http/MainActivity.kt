@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
     }
 
     private fun sendGankGirlRequest () {
-        gankGirlVm.fetchGankGirl(0,20)
+        gankGirlVm.fetchGankGirl()
     }
 
     override fun onClick(v: View?) {

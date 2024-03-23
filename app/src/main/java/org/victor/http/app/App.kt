@@ -23,7 +23,7 @@ class App: Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
-        ApiClient.BASE_URL = "https://gank.io/api/v2/"
+        ApiClient.BASE_URL = "https://www.wanandroid.com/"
 
     }
 }

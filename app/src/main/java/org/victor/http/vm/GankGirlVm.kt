@@ -17,10 +17,10 @@ import org.victor.http.interfaces.IGankGirlDataSource
 class GankGirlVm(private val dataSource: IGankGirlDataSource): ViewModel() {
 
     val gankGirlData = dataSource.gankGirlData
-    fun fetchGankGirl(page: Int, pageSize: Int) {
+    fun fetchGankGirl() {
         // Launch a coroutine that reads from a remote data source and updates cache
         viewModelScope.launch {
-            dataSource.fetchGankGirl(page,pageSize)
+            dataSource.fetchGankGirl()
         }
     }
 }

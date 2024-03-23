@@ -12,17 +12,12 @@ package org.victor.http.data
  * -----------------------------------------------------------------
  */
 class GankDetailInfo {
-    var _id: String? = null
-    var author: String? = null
-    var category: String? = null
-    var createdAt: String? = null
-    var publishedAt: String? = null
     var desc: String? = null
+    var imagePath: String? = null
     var title: String? = null
-    var type: String? = null
     var url: String? = null
-    var likeCounts: Int = 0
-    var stars: Int = 0
-    var views: Int = 0
-    var images: List<String>? = null
+    var id: Int = 0
+    var isVisible: Int = 0
+    var order: Int = 0
+    var type: Int = 0
 }

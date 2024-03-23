@@ -12,9 +12,7 @@ package org.victor.http.data
  * -----------------------------------------------------------------
  */
 class GankDetailEntity {
-    var status: Int = 0
-    var page: Int = 0
-    var page_count: Int = 0
-    var total_counts: Int = 0
     var data: List<GankDetailInfo>? = null
+    var errorCode: Int = 0
+    var errorMsg: String? = null
 }

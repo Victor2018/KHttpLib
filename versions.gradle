@@ -40,17 +40,8 @@ versions.match = "v1.1"
 versions.multidex = "1.0.3"
 versions.permissions = "v1.0"
 versions.player = "v1.7"
-versions.SearchFilter = "v1.0.4"
 versions.workVersion = '2.1.0'
 versions.preference = '1.1.0'
-versions.picture_selector = 'v2.5.9'
-versions.aliyun_oss = '2.9.3'
-versions.number_picker = '1.2.0'
-versions.nim = '8.1.2'
-versions.marquee_view = '1.4.0'
-versions.flow_layout_manager = 'v1.8'
-versions.wechat_sdk = '5.4.0'
-versions.countdownview = '2.1.6'
 
 ext.versions = versions
 
@@ -183,45 +174,18 @@ def multidex = [:]
 multidex.core = "com.android.support:multidex:$versions.multidex"
 deps.multidex = multidex
 
-def bugly = [:]
-bugly.core = "com.tencent.bugly:crashreport:latest.release"
-deps.bugly = bugly
 
 def preference = [:]
 preference.core = "androidx.preference:preference:$versions.preference"
 deps.preference = preference
 
-def picture_selector = [:]
-picture_selector.core = "com.github.LuckSiege.PictureSelector:picture_library:$versions.picture_selector"
-deps.picture_selector = picture_selector
 
-def aliyun_oss = [:]
-aliyun_oss.core = "com.aliyun.dpa:oss-android-sdk:$versions.aliyun_oss"
-deps.aliyun_oss = aliyun_oss
 
-def number_picker = [:]
-number_picker.core = "cn.carbswang.android:NumberPickerView:$versions.number_picker"
-deps.number_picker = number_picker
 
-def nim = [:]
-nim.basesdk = "com.netease.nimlib:basesdk:$versions.nim"
-deps.nim = nim
 
-def marquee_view = [:]
-marquee_view.core = "com.sunfusheng:MarqueeView:$versions.marquee_view"
-deps.marquee_view = marquee_view
 
-def flow_layout_manager = [:]
-flow_layout_manager.core = "com.github.1002326270xc:LayoutManager-FlowLayout:$versions.flow_layout_manager"
-deps.flow_layout_manager = flow_layout_manager
 
-def wechat_sdk = [:]
-wechat_sdk.core = "com.tencent.mm.opensdk:wechat-sdk-android-without-mta:$versions.wechat_sdk"
-deps.wechat_sdk = wechat_sdk
 
-def countdownview = [:]
-countdownview.core = "com.github.iwgang:countdownview:$versions.countdownview"
-deps.countdownview = countdownview
 
 ext.deps = deps
 

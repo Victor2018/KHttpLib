@@ -25,17 +25,17 @@ import org.victor.http.service.GankApiService
 class GankGirlDataSource(private val ioDispatcher: CoroutineDispatcher): BaseDataSource(),IGankGirlDataSource {
     override val gankGirlData = MutableLiveData<HttpResult<GankDetailEntity>>()
 
-    override suspend fun fetchGankGirl(page: Int, pageSize: Int) {
+    override suspend fun fetchGankGirl() {
         // Force Main thread
         withContext(Dispatchers.Main) {
-            gankGirlData.value = fetchGankGirlReq(page,pageSize)
+            gankGirlData.value = fetchGankGirlReq()
         }
 
     }
 
-    private suspend fun <T> fetchGankGirlReq(page: Int,pageSize: Int): T = withContext(ioDispatcher) {
+    private suspend fun <T> fetchGankGirlReq(): T = withContext(ioDispatcher) {
 
         handleRespone(ApiClient.getApiService(GankApiService::class.java)
-            .fetchGankGirl(page,pageSize)) as T
+            .fetchGankGirl()) as T
     }
 }
