@@ -6,6 +6,7 @@ import org.victor.http.lib.converter.FastJsonConverterFactory
 import org.victor.http.lib.interceptor.BasicParamsInterceptor
 import org.victor.http.lib.interceptor.LogInterceptor
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 
@@ -48,8 +49,8 @@ object ApiClient {
         Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .client(okHttpClient)
-//                    .addConverterFactory(GsonConverterFactory.create())
-                .addConverterFactory(FastJsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+//                .addConverterFactory(FastJsonConverterFactory.create())
                 .addCallAdapterFactory(NetworkResponseAdapterFactory())
                 .build()
     }

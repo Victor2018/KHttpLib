@@ -1,20 +1,15 @@
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
+    id 'maven-publish'
 }
 
-// JitPack Maven
-apply plugin: 'com.github.dcendents.android-maven'
-// Group
-group='com.github.Victor2018'
-
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.3"
+    compileSdk 33
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 30
+        minSdkVersion 21
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0"
 
@@ -74,11 +69,21 @@ dependencies {
 
     //网络请求
     api deps.retrofit.core
-//    api deps.retrofit.retrofit_converter_gson //已替换为fastjson解析
+    api deps.retrofit.retrofit_converter_gson //已替换为fastjson解析
     api deps.okhttp3.core
     api deps.okhttp3.logging
     api deps.fastjson.core
+}
 
-
-
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                groupId = 'com.github.Victor2018' //groupId 随便取
+                artifactId = 'cherry'  //artifactId 随便取
+                version = '1.0.0'
+            }
+        }
+    }
 }
