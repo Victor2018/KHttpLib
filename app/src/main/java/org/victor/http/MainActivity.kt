@@ -5,9 +5,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
-import com.alibaba.fastjson.JSON
 import kotlinx.android.synthetic.main.activity_main.*
 import org.victor.http.lib.data.HttpResult
+import org.victor.http.lib.util.JsonUtils
 import org.victor.http.util.InjectorUtils
 import org.victor.http.vm.GankGirlVm
 
@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         gankGirlVm.gankGirlData.observe(this, Observer {
             when(it) {
                 is HttpResult.Success -> {
-                    mTvResponse.text = JSON.toJSONString(it.value)
+                    mTvResponse.text = JsonUtils.toJSONString(it.value)
                 }
                 is HttpResult.Error -> {
                     mTvResponse.text = it.message.toString()

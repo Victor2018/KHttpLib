@@ -9,13 +9,13 @@ import org.victor.http.lib.data.HttpResult
  * -----------------------------------------------------------------
  * Copyright (C) 2020-2080, by Victor, All rights reserved.
  * -----------------------------------------------------------------
- * File: IGankGirlDataSource
+ * File: IGankGirlDS
  * Author: Victor
  * Date: 2021/2/24 16:37
  * Description: 
  * -----------------------------------------------------------------
  */
-interface IGankGirlDataSource {
+interface IGankGirlDS {
     val gankGirlData: LiveData<HttpResult<GankDetailEntity>>
     suspend fun fetchGankGirl()
 }

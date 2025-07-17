@@ -5,10 +5,10 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.victor.http.data.GankDetailEntity
-import org.victor.http.interfaces.IGankGirlDataSource
+import org.victor.http.interfaces.IGankGirlDS
 import org.victor.http.lib.ApiClient
 import org.victor.http.lib.data.HttpResult
-import org.victor.http.lib.datasource.BaseDataSource
+import org.victor.http.lib.datasource.AbsDS
 import org.victor.http.service.GankApiService
 
 
@@ -16,13 +16,13 @@ import org.victor.http.service.GankApiService
  * -----------------------------------------------------------------
  * Copyright (C) 2020-2080, by Victor, All rights reserved.
  * -----------------------------------------------------------------
- * File: GankGirlDataSource
+ * File: GankGirlDS
  * Author: Victor
  * Date: 2021/2/24 16:42
  * Description: 
  * -----------------------------------------------------------------
  */
-class GankGirlDataSource(private val ioDispatcher: CoroutineDispatcher): BaseDataSource(),IGankGirlDataSource {
+class GankGirlDS(private val ioDispatcher: CoroutineDispatcher): AbsDS(),IGankGirlDS {
     override val gankGirlData = MutableLiveData<HttpResult<GankDetailEntity>>()
 
     override suspend fun fetchGankGirl() {

@@ -9,18 +9,18 @@ import retrofit2.Converter
 import retrofit2.Response
 import java.io.IOException
 
-
 /*
  * -----------------------------------------------------------------
  * Copyright (C) 2020-2080, by Victor, All rights reserved.
  * -----------------------------------------------------------------
  * File: NetworkResponseCall
  * Author: Victor
- * Date: 2021/2/24 15:51
+ * Date: 2022/3/1 12:03
  * Description: interface implementation in order to make Retrofit return [NetworkResponse]
  * when API call is triggered
  * -----------------------------------------------------------------
  */
+
 internal class NetworkResponseCall<S : Any, E : Any>(
     private val delegate: Call<S>,
     private val errorConverter: Converter<ResponseBody, E>
@@ -35,16 +35,13 @@ internal class NetworkResponseCall<S : Any, E : Any>(
                 if (response.isSuccessful) {
                     if (body != null) {
                         // Response is successful
-                        callback.onResponse(
-                            this@NetworkResponseCall,
-                            Response.success(NetworkResponse.Success(body))
-                        )
+                        callback.onResponse(this@NetworkResponseCall,
+                            Response.success(NetworkResponse.Success(body)))
                     } else {
                         // Response is successful but the body is null
                         callback.onResponse(
                             this@NetworkResponseCall,
-                            Response.success(NetworkResponse.ServerError(code,"body == null"))
-                        )
+                            Response.success(NetworkResponse.ServerError(code,"body == null")))
                     }
                 } else {
                     val errorBody = when {

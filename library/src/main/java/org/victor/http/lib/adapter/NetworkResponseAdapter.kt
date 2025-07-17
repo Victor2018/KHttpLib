@@ -12,10 +12,11 @@ import java.lang.reflect.Type
  * -----------------------------------------------------------------
  * File: NetworkResponseAdapter
  * Author: Victor
- * Date: 2021/2/24 15:44
+ * Date: 2022/3/1 12:03
  * Description: interface implementation to let Retrofit know about [NetworkResponseCall]
  * -----------------------------------------------------------------
  */
+
 class NetworkResponseAdapter<S : Any, E : Any>(
     private val successType: Type,
     private val errorBodyConverter: Converter<ResponseBody, E>

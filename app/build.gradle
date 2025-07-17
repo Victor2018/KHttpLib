@@ -35,6 +35,43 @@ android {
 }
 
 dependencies {
+    implementation(fileTree(dir: "libs", include: ["*.jar"]))
+
+    implementation(deps.kotlin.stdlib)
+    implementation(deps.basic.app_compat)
+    implementation(deps.basic.constraint_layout)
+    implementation(deps.basic.material)
+    implementation(deps.basic.recyclerview)
+    implementation(deps.basic.cardview)
+
+    testImplementation(deps.basic.junit)
+
+    androidTestImplementation(deps.atsl.runner)
+    androidTestImplementation(deps.atsl.rules)
+    androidTestImplementation(deps.atsl.ext_junit)
+    androidTestImplementation(deps.espresso.core)
+    androidTestImplementation(deps.espresso.contrib)
+
+    //lifecycle
+    implementation(deps.lifecycle.runtime)
+    implementation(deps.lifecycle.viewmodel_ktx)
+    implementation(deps.lifecycle.livedata_ktx)
+
+    //ktx
+    implementation(deps.ktx.core)
+    implementation(deps.ktx.activity)
+    implementation(deps.ktx.fragment)
+
+    //协程
+    implementation(deps.coroutines.core)
+    implementation(deps.coroutines.android)
+    testImplementation(deps.coroutines.test)
+
+    //网络请求
+    implementation(deps.retrofit.core)
+    implementation(deps.retrofit.retrofit_converter_gson)
+    implementation(deps.okhttp3.core)
+    implementation(deps.okhttp3.logging)
 
     implementation project(':library')
 }

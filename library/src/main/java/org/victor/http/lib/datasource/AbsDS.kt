@@ -1,6 +1,5 @@
 package org.victor.http.lib.datasource
 
-import android.text.TextUtils
 import android.util.Log
 import org.victor.http.lib.adapter.NetworkResponse
 import org.victor.http.lib.data.HttpError
@@ -11,13 +10,13 @@ import org.victor.http.lib.data.HttpResult
  * -----------------------------------------------------------------
  * Copyright (C) 2020-2080, by Victor, All rights reserved.
  * -----------------------------------------------------------------
- * File: BaseDataSource
+ * File: AbsDS
  * Author: Victor
  * Date: 2021/2/24 16:00
  * Description: 
  * -----------------------------------------------------------------
  */
-abstract class BaseDataSource {
+abstract class AbsDS {
     val TAG = javaClass.simpleName
 
     fun handleRespone (response: NetworkResponse<Any, HttpError>): HttpResult<Any> {

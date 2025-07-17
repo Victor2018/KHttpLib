@@ -2,11 +2,11 @@ package org.victor.http.lib.interceptor
 
 import android.text.TextUtils
 import android.util.Log
-import com.alibaba.fastjson.JSON
+import com.google.gson.Gson
 import okhttp3.*
 import okio.Buffer
+import org.victor.http.lib.BuildConfig
 import java.io.IOException
-
 
 /*
  * -----------------------------------------------------------------
@@ -14,14 +14,15 @@ import java.io.IOException
  * -----------------------------------------------------------------
  * File: BasicParamsInterceptor
  * Author: Victor
- * Date: 2021/2/24 16:04
+ * Date: 2022/3/1 12:03
  * Description: 添加公共参数拦截器
  * -----------------------------------------------------------------
  */
+
 class BasicParamsInterceptor: Interceptor {
     val TAG = "BasicParamsInterceptor"
     var queryParamsMap: MutableMap<String, String> = HashMap()
-    var paramsMap: MutableMap<String, String>? = HashMap()
+    var paramsMap: MutableMap<String, String> = HashMap()
     var headerParamsMap: MutableMap<String, String> = HashMap()
     var headerLinesList: MutableList<String> = ArrayList()
 
@@ -35,7 +36,9 @@ class BasicParamsInterceptor: Interceptor {
         // process header params inject
         val headerBuilder = request?.headers?.newBuilder()
         if (headerParamsMap.size > 0) {
-            Log.e(TAG,"intercept-headerParamsMap = " + headerParamsMap)
+            if (BuildConfig.DEBUG) {
+                Log.e(TAG, "intercept-headerParamsMap = $headerParamsMap")
+            }
             val iterator: Iterator<*> = headerParamsMap.entries.iterator()
             while (iterator.hasNext()) {
                 val entry = iterator.next() as Map.Entry<*, *>
@@ -44,7 +47,9 @@ class BasicParamsInterceptor: Interceptor {
             requestBuilder?.headers(headerBuilder!!.build())
         }
         if (headerLinesList.size > 0) {
-            Log.e(TAG,"intercept-headerLinesList = " + JSON.toJSONString(headerLinesList))
+            if (BuildConfig.DEBUG) {
+                Log.e(TAG,"intercept-headerLinesList = " + Gson().toJson(headerLinesList))
+            }
             for (line in headerLinesList) {
                 headerBuilder?.add(line)
             }
@@ -52,51 +57,54 @@ class BasicParamsInterceptor: Interceptor {
         }
         // process header params end
 
-
         // process queryParams inject whatever it's GET or POST
         if (queryParamsMap.size > 0) {
-            Log.e(TAG,"intercept-queryParamsMap = " + queryParamsMap)
+            if (BuildConfig.DEBUG) {
+                Log.e(TAG, "intercept-queryParamsMap = $queryParamsMap")
+            }
             request = injectParamsIntoUrl(request?.url?.newBuilder()!!, requestBuilder!!, queryParamsMap)
         }
 
         // process post body inject
-        if (paramsMap != null && paramsMap!!.size > 0 && request?.method.equals("POST")) {
-            Log.e(TAG,"intercept-paramsMap = " + paramsMap)
-            if (request?.body is FormBody) {
-                val newFormBodyBuilder = FormBody.Builder()
-                if (paramsMap!!.size > 0) {
+
+        if (TextUtils.equals("POST",request?.method)) {
+            if (paramsMap != null && paramsMap.size > 0) {
+                if (request?.body is FormBody) {
+                    val newFormBodyBuilder = FormBody.Builder()
+                    if (paramsMap!!.size > 0) {
+                        val iterator: Iterator<*> = paramsMap!!.entries.iterator()
+                        while (iterator.hasNext()) {
+                            val entry = iterator.next() as Map.Entry<*, *>
+                            newFormBodyBuilder.add((entry.key as String?)!!, (entry.value as String?)!!)
+                        }
+                    }
+                    val oldFormBody = request?.body as FormBody
+                    val paramSize = oldFormBody.size
+                    if (paramSize > 0) {
+                        for (i in 0 until paramSize) {
+                            newFormBodyBuilder.add(oldFormBody.name(i), oldFormBody.value(i))
+                        }
+                    }
+                    requestBuilder?.post(newFormBodyBuilder.build())
+                } else if (request?.body is MultipartBody) {
+                    val multipartBuilder = MultipartBody.Builder().setType(MultipartBody.FORM)
                     val iterator: Iterator<*> = paramsMap!!.entries.iterator()
                     while (iterator.hasNext()) {
                         val entry = iterator.next() as Map.Entry<*, *>
-                        newFormBodyBuilder.add((entry.key as String?)!!, (entry.value as String?)!!)
+                        multipartBuilder.addFormDataPart((entry.key as String?)!!, (entry.value as String?)!!)
                     }
-                }
-                val oldFormBody = request?.body as FormBody
-                val paramSize = oldFormBody.size
-                if (paramSize > 0) {
-                    for (i in 0 until paramSize) {
-                        newFormBodyBuilder.add(oldFormBody.name(i), oldFormBody.value(i))
+                    val oldParts = (request?.body as MultipartBody).parts
+                    if (oldParts != null && oldParts.size > 0) {
+                        for (part in oldParts) {
+                            multipartBuilder.addPart(part)
+                        }
                     }
+                    requestBuilder?.post(multipartBuilder.build())
                 }
-                requestBuilder?.post(newFormBodyBuilder.build())
-                request = requestBuilder?.build()
-            } else if (request?.body is MultipartBody) {
-                val multipartBuilder = MultipartBody.Builder().setType(MultipartBody.FORM)
-                val iterator: Iterator<*> = paramsMap!!.entries.iterator()
-                while (iterator.hasNext()) {
-                    val entry = iterator.next() as Map.Entry<*, *>
-                    multipartBuilder.addFormDataPart((entry.key as String?)!!, (entry.value as String?)!!)
-                }
-                val oldParts = (request?.body as MultipartBody).parts
-                if (oldParts != null && oldParts.size > 0) {
-                    for (part in oldParts) {
-                        multipartBuilder.addPart(part)
-                    }
-                }
-                requestBuilder?.post(multipartBuilder.build())
-                request = requestBuilder?.build()
             }
         }
+
+        request = requestBuilder?.build()
         return chain.proceed(request!!)
     }
 
@@ -132,12 +140,14 @@ class BasicParamsInterceptor: Interceptor {
             if (request != null) request.writeTo(buffer) else return ""
             buffer.readUtf8()
         } catch (e: IOException) {
+            e.printStackTrace()
             "did not work"
         }
     }
 
     class Builder {
-        var interceptor: BasicParamsInterceptor
+        var interceptor: BasicParamsInterceptor = BasicParamsInterceptor()
+
         fun addParam(key: String, value: String): Builder {
             interceptor.paramsMap!![key] = value
             return this
@@ -188,8 +198,5 @@ class BasicParamsInterceptor: Interceptor {
             return interceptor
         }
 
-        init {
-            interceptor = BasicParamsInterceptor()
-        }
     }
 }

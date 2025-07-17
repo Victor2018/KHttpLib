@@ -2,17 +2,17 @@ package org.victor.http.lib.adapter
 
 import java.io.IOException
 
-
 /*
  * -----------------------------------------------------------------
  * Copyright (C) 2020-2080, by Victor, All rights reserved.
  * -----------------------------------------------------------------
  * File: NetworkResponse
  * Author: Victor
- * Date: 2021/2/24 15:44
+ * Date: 2022/3/1 12:06
  * Description: Represents success response with body
  * -----------------------------------------------------------------
  */
+
 sealed class NetworkResponse<out T : Any, out U : Any> {
 
     /**
@@ -39,4 +39,5 @@ sealed class NetworkResponse<out T : Any, out U : Any> {
      * server error (such as body == null or errorBody == null).
      */
     data class ServerError(val code: Int,val error: String) : NetworkResponse<Nothing, Nothing>()
+
 }

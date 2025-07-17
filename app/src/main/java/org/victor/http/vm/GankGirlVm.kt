@@ -2,7 +2,7 @@ package org.victor.http.vm
 
 import androidx.lifecycle.*
 import kotlinx.coroutines.launch
-import org.victor.http.interfaces.IGankGirlDataSource
+import org.victor.http.interfaces.IGankGirlDS
 
 /*
  * -----------------------------------------------------------------
@@ -14,7 +14,7 @@ import org.victor.http.interfaces.IGankGirlDataSource
  * Description: 
  * -----------------------------------------------------------------
  */
-class GankGirlVm(private val dataSource: IGankGirlDataSource): ViewModel() {
+class GankGirlVm(private val dataSource: IGankGirlDS): ViewModel() {
 
     val gankGirlData = dataSource.gankGirlData
     fun fetchGankGirl() {

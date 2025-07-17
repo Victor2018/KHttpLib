@@ -6,18 +6,18 @@ import retrofit2.Retrofit
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 
-
 /*
  * -----------------------------------------------------------------
  * Copyright (C) 2020-2080, by Victor, All rights reserved.
  * -----------------------------------------------------------------
  * File: NetworkResponseAdapterFactory
  * Author: Victor
- * Date: 2021/2/24 15:50
+ * Date: 2022/3/1 12:03
  * Description: implementation that returns [NetworkResponseAdapter] for the interface
  * methods which it can handle or null otherwise
  * -----------------------------------------------------------------
  */
+
 class NetworkResponseAdapterFactory : CallAdapter.Factory() {
 
     override fun get(

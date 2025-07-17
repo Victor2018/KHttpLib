@@ -5,6 +5,7 @@ import org.victor.http.lib.adapter.NetworkResponseAdapterFactory
 import org.victor.http.lib.converter.FastJsonConverterFactory
 import org.victor.http.lib.interceptor.BasicParamsInterceptor
 import org.victor.http.lib.interceptor.LogInterceptor
+import org.victor.http.lib.verifier.HttpHostNameVerifier
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
@@ -37,12 +38,16 @@ object ApiClient {
     }
 
     private val okHttpClient by lazy {
-        OkHttpClient.Builder()
-                .connectTimeout(TIME_OUT, TimeUnit.SECONDS)
-                .readTimeout(TIME_OUT, TimeUnit.SECONDS)
-                .addInterceptor(LogInterceptor())
-                .addInterceptor(basicParamsInterceptor)
-                .build()
+        var builder = OkHttpClient.Builder()
+            .connectTimeout(TIME_OUT, TimeUnit.SECONDS)
+            .readTimeout(TIME_OUT, TimeUnit.SECONDS)
+            .addInterceptor(LogInterceptor())
+            .addInterceptor(basicParamsInterceptor)
+
+        if (!BuildConfig.DEBUG) {
+//            builder.hostnameVerifier(HttpHostNameVerifier())
+        }
+        builder.build()
     }
 
     private val retrofit by lazy {
