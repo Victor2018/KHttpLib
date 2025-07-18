@@ -1,5 +1,6 @@
 package org.victor.http.lib
 
+import android.text.TextUtils
 import okhttp3.OkHttpClient
 import org.victor.http.lib.adapter.NetworkResponseAdapterFactory
 import org.victor.http.lib.converter.FastJsonConverterFactory
@@ -87,4 +88,27 @@ object ApiClient {
             map[apiClass] as T
         }
     }
+
+    fun addHeader(key: String,value: String) {
+        basicParamsInterceptor.headerParamsMap[key] = value
+    }
+
+    /**
+     * header 是否有参数 key
+     */
+    fun headerHasParm (key: String): Boolean {
+        var headerToken: String? = null
+        if (basicParamsInterceptor.headerParamsMap.containsKey(key)) {
+            headerToken = basicParamsInterceptor.headerParamsMap[key]
+        }
+        return TextUtils.isEmpty(headerToken)
+    }
+
+    /**
+     * 获取所有header parms
+     */
+    fun getHttpHeaderParms(): Map<String, String> {
+        return basicParamsInterceptor.headerParamsMap
+    }
+
 }
