@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import okhttp3.Interceptor
 import okhttp3.Response
 import okio.Buffer
+import org.victor.http.lib.ApiClient
 import org.victor.http.lib.BuildConfig
 import java.nio.charset.Charset
 
@@ -25,8 +26,8 @@ class LogInterceptor: Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         var request = chain.request()
 
-        Log.e(TAG, "--------------------request-------------------")
-        if (BuildConfig.DEBUG) {
+        if (ApiClient.logEnable) {
+            Log.e(TAG, "--------------------request-------------------")
             Log.e(TAG, "request url = ${request.url}")
             Log.e(TAG, "request url = ${request.url.toString().replace("http","url")}")
             Log.e(TAG, "request headers = ${Gson().toJson(request.headers)}")
@@ -40,20 +41,20 @@ class LogInterceptor: Interceptor {
 //                var charset = contentType?.charset(UTF8)
         val parm: String = buffer.readString(charset)
 
-        if (BuildConfig.DEBUG) {
+        if (ApiClient.logEnable) {
             Log.e(TAG, "request parm = $parm")
             Log.e(TAG, "request requestMethod = ${request.method}")
         }
 
         var response = chain.proceed(request)
 
-        Log.e(TAG, "--------------------repsonse-------------------")
-        if (BuildConfig.DEBUG) {
+        if (ApiClient.logEnable) {
+            Log.e(TAG, "--------------------response-------------------")
             Log.e(TAG,"repsonse url = ${request.url}")
             Log.e(TAG, "repsonse url = ${request.url.toString().replace("http","url")}")
             Log.e(TAG,"repsonse code = ${response.code}")
             //response.peekBody不会关闭流
-            Log.e(TAG,"responseData = ${response.peekBody(1024)?.string()}")
+            Log.e(TAG,"responseData = ${response.peekBody(1024).string()}")
         }
         return response
     }

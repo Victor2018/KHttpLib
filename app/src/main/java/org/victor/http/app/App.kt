@@ -24,6 +24,6 @@ class App: Application() {
         super.onCreate()
         instance = this
         ApiClient.BASE_URL = "https://www.wanandroid.com/"
-
+        ApiClient.logEnable = true
     }
 }

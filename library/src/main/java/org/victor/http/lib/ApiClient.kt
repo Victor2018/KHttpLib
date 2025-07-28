@@ -3,10 +3,8 @@ package org.victor.http.lib
 import android.text.TextUtils
 import okhttp3.OkHttpClient
 import org.victor.http.lib.adapter.NetworkResponseAdapterFactory
-import org.victor.http.lib.converter.FastJsonConverterFactory
 import org.victor.http.lib.interceptor.BasicParamsInterceptor
 import org.victor.http.lib.interceptor.LogInterceptor
-import org.victor.http.lib.verifier.HttpHostNameVerifier
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
@@ -23,8 +21,9 @@ import java.util.concurrent.TimeUnit
  * -----------------------------------------------------------------
  */
 object ApiClient {
-    const val TIME_OUT:Long = 30
+    var TIME_OUT:Long = 30
     var BASE_URL = ""
+    var logEnable = true
 
     /**
      * 用于存储ApiService
