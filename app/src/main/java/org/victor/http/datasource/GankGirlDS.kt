@@ -34,8 +34,7 @@ class GankGirlDS(private val ioDispatcher: CoroutineDispatcher): AbsDS(),IGankGi
     }
 
     private suspend fun <T> fetchGankGirlReq(): T = withContext(ioDispatcher) {
-
-        handleRespone(ApiClient.getApiService(GankApiService::class.java)
+        handleResponse(ApiClient.getApiService(GankApiService::class.java)
             .fetchGankGirl()) as T
     }
 }
