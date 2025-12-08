@@ -30,18 +30,19 @@ object ApiClient {
      */
     private val map = mutableMapOf<Class<*>, Any>()
 
-    private val basicParamsInterceptorBuild by lazy {
+    private val basicParamsInterceptor by lazy {
         BasicParamsInterceptor.Builder()
 //                .addHeaderParam("X-TOKEN","ff8ebca1e43feb34baf10b7b71b0ca2a98f5b2650df3b85e976639ffbbe9bacf")
 //                .addQueryParam("deviceId", "12345")
+            .build()
     }
 
     private val okHttpClient by lazy {
         var builder = OkHttpClient.Builder()
             .connectTimeout(TIME_OUT, TimeUnit.SECONDS)
             .readTimeout(TIME_OUT, TimeUnit.SECONDS)
+            .addInterceptor(basicParamsInterceptor)
             .addInterceptor(LogInterceptor())
-            .addInterceptor(basicParamsInterceptorBuild.build())
 
         if (!BuildConfig.DEBUG) {
 //            builder.hostnameVerifier(HttpHostNameVerifier())
@@ -51,12 +52,12 @@ object ApiClient {
 
     private val retrofit by lazy {
         Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .client(okHttpClient)
-                .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl(BASE_URL)
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
 //                .addConverterFactory(FastJsonConverterFactory.create())
-                .addCallAdapterFactory(NetworkResponseAdapterFactory())
-                .build()
+            .addCallAdapterFactory(NetworkResponseAdapterFactory())
+            .build()
     }
 
     /**
@@ -88,21 +89,25 @@ object ApiClient {
     }
 
     fun addHeader(key: String,value: String) {
-        basicParamsInterceptorBuild.addHeaderParam(key,value)
+        basicParamsInterceptor.headerParamsMap[key] = value
     }
 
     /**
      * header 是否有参数 key
      */
     fun headerHasParm (key: String): Boolean {
-        return basicParamsInterceptorBuild.headerHasParm(key)
+        var headerToken: String? = null
+        if (basicParamsInterceptor.headerParamsMap.containsKey(key)) {
+            headerToken = basicParamsInterceptor.headerParamsMap[key]
+        }
+        return TextUtils.isEmpty(headerToken)
     }
 
     /**
      * 获取所有header parms
      */
     fun getHttpHeaderParms(): Map<String, String> {
-        return basicParamsInterceptorBuild.getHttpHeaderParms()
+        return basicParamsInterceptor.headerParamsMap
     }
 
 }
