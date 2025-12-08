@@ -25,5 +25,8 @@ class App: Application() {
         instance = this
         ApiClient.BASE_URL = "https://www.wanandroid.com/"
         ApiClient.logEnable = true
+        ApiClient.addHeader("VersionCode", "v3.0.0")
+        ApiClient.addHeader("AccessToken", "token value 5164631")
+        ApiClient.addHeader("Content-Type", "application/json")
     }
 }

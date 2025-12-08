@@ -30,11 +30,10 @@ object ApiClient {
      */
     private val map = mutableMapOf<Class<*>, Any>()
 
-    private val basicParamsInterceptor by lazy {
+    private val basicParamsInterceptorBuild by lazy {
         BasicParamsInterceptor.Builder()
 //                .addHeaderParam("X-TOKEN","ff8ebca1e43feb34baf10b7b71b0ca2a98f5b2650df3b85e976639ffbbe9bacf")
 //                .addQueryParam("deviceId", "12345")
-                .build()
     }
 
     private val okHttpClient by lazy {
@@ -42,7 +41,7 @@ object ApiClient {
             .connectTimeout(TIME_OUT, TimeUnit.SECONDS)
             .readTimeout(TIME_OUT, TimeUnit.SECONDS)
             .addInterceptor(LogInterceptor())
-            .addInterceptor(basicParamsInterceptor)
+            .addInterceptor(basicParamsInterceptorBuild.build())
 
         if (!BuildConfig.DEBUG) {
 //            builder.hostnameVerifier(HttpHostNameVerifier())
@@ -89,25 +88,21 @@ object ApiClient {
     }
 
     fun addHeader(key: String,value: String) {
-        basicParamsInterceptor.headerParamsMap[key] = value
+        basicParamsInterceptorBuild.addHeaderParam(key,value)
     }
 
     /**
      * header 是否有参数 key
      */
     fun headerHasParm (key: String): Boolean {
-        var headerToken: String? = null
-        if (basicParamsInterceptor.headerParamsMap.containsKey(key)) {
-            headerToken = basicParamsInterceptor.headerParamsMap[key]
-        }
-        return TextUtils.isEmpty(headerToken)
+        return basicParamsInterceptorBuild.headerHasParm(key)
     }
 
     /**
      * 获取所有header parms
      */
     fun getHttpHeaderParms(): Map<String, String> {
-        return basicParamsInterceptor.headerParamsMap
+        return basicParamsInterceptorBuild.getHttpHeaderParms()
     }
 
 }

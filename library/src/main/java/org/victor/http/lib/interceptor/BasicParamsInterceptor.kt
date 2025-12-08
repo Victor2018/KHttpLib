@@ -194,6 +194,18 @@ class BasicParamsInterceptor: Interceptor {
             return this
         }
 
+        fun headerHasParm (key: String): Boolean {
+            var headerToken: String? = null
+            if (interceptor.headerParamsMap.containsKey(key)) {
+                headerToken = interceptor.headerParamsMap[key]
+            }
+            return TextUtils.isEmpty(headerToken)
+        }
+
+        fun getHttpHeaderParms(): Map<String, String> {
+            return interceptor.headerParamsMap
+        }
+
         fun build(): BasicParamsInterceptor {
             return interceptor
         }
