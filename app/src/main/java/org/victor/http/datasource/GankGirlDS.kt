@@ -8,7 +8,7 @@ import org.victor.http.data.GankDetailEntity
 import org.victor.http.interfaces.IGankGirlDS
 import org.victor.http.lib.ApiClient
 import org.victor.http.lib.data.HttpResult
-import org.victor.http.lib.datasource.AbsDS
+import org.victor.http.lib.util.handleResponse
 import org.victor.http.service.GankApiService
 
 
@@ -22,7 +22,7 @@ import org.victor.http.service.GankApiService
  * Description: 
  * -----------------------------------------------------------------
  */
-class GankGirlDS(private val ioDispatcher: CoroutineDispatcher): AbsDS(),IGankGirlDS {
+class GankGirlDS(private val ioDispatcher: CoroutineDispatcher): IGankGirlDS {
     override val gankGirlData = MutableLiveData<HttpResult<GankDetailEntity>>()
 
     override suspend fun fetchGankGirl() {
@@ -33,8 +33,9 @@ class GankGirlDS(private val ioDispatcher: CoroutineDispatcher): AbsDS(),IGankGi
 
     }
 
-    private suspend fun <T> fetchGankGirlReq(): T = withContext(ioDispatcher) {
-        handleResponse(ApiClient.getApiService(GankApiService::class.java)
-            .fetchGankGirl()) as T
+    private suspend fun fetchGankGirlReq(): HttpResult<GankDetailEntity> = withContext(ioDispatcher) {
+        ApiClient.getApiService(GankApiService::class.java)
+            .fetchGankGirl()
+            .handleResponse()
     }
 }
