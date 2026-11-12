@@ -19,7 +19,7 @@
     </androidx.core.widget.NestedScrollView>
 
     <Button
-        android:id="@+id/mBtnSend"
+        android:id="@+id/mBtnBanner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
@@ -27,7 +27,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="100dp"
         android:textAllCaps="false"
-        android:text="send"/>
+        android:text="Banner"/>
+
+    <Button
+        android:id="@+id/mBtnArticle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/mBtnBanner"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="10dp"
+        android:textAllCaps="false"
+        android:text="Article"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

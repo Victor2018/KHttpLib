@@ -27,11 +27,22 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
     fun initialize () {
         subscribeUi()
 
-        mBtnSend.setOnClickListener(this)
+        mBtnBanner.setOnClickListener(this)
+        mBtnArticle.setOnClickListener(this)
     }
 
     fun subscribeUi() {
         gankGirlVm.gankGirlData.observe(this, Observer {
+            when(it) {
+                is HttpResult.Success -> {
+                    mTvResponse.text = JsonUtils.toJSONString(it.value)
+                }
+                is HttpResult.Error -> {
+                    mTvResponse.text = it.message.toString()
+                }
+            }
+        })
+        gankGirlVm.articleData.observe(this, Observer {
             when(it) {
                 is HttpResult.Success -> {
                     mTvResponse.text = JsonUtils.toJSONString(it.value)
@@ -47,10 +58,17 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         gankGirlVm.fetchGankGirl()
     }
 
+    private fun sendArticleRequest () {
+        gankGirlVm.fetchArticle()
+    }
+
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.mBtnSend -> {
+            R.id.mBtnBanner -> {
                 sendGankGirlRequest()
+            }
+            R.id.mBtnArticle -> {
+                sendArticleRequest()
             }
         }
     }

@@ -1,13 +1,19 @@
 package org.victor.http.lib
 
 import android.text.TextUtils
+import android.util.Log
 import okhttp3.OkHttpClient
 import org.victor.http.lib.adapter.NetworkResponseAdapterFactory
+import org.victor.http.lib.bizparser.BusinessResponseParser
+import org.victor.http.lib.data.HttpResult
 import org.victor.http.lib.interceptor.BasicParamsInterceptor
 import org.victor.http.lib.interceptor.LogInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+
+
+private const val TAG = "ApiClient"
 
 
 /*
@@ -30,6 +36,12 @@ object ApiClient {
      */
     private val map = mutableMapOf<Class<*>, Any>()
 
+    /**
+     * 业务响应解析器，项目统一注册一个
+     */
+    @Volatile
+    private var responseParser: BusinessResponseParser<*, *>? = null
+
     private val basicParamsInterceptor by lazy {
         BasicParamsInterceptor.Builder()
 //                .addHeaderParam("X-TOKEN","ff8ebca1e43feb34baf10b7b71b0ca2a98f5b2650df3b85e976639ffbbe9bacf")
@@ -38,7 +50,7 @@ object ApiClient {
     }
 
     private val okHttpClient by lazy {
-        var builder = OkHttpClient.Builder()
+        val builder = OkHttpClient.Builder()
             .connectTimeout(TIME_OUT, TimeUnit.SECONDS)
             .readTimeout(TIME_OUT, TimeUnit.SECONDS)
             .addInterceptor(basicParamsInterceptor)
@@ -85,6 +97,39 @@ object ApiClient {
             }
         } else {
             map[apiClass] as T
+        }
+    }
+
+    /**
+     * 初始化网络库：设置 baseUrl、日志开关，并注册业务响应解析器
+     */
+    fun <T : Any> init(
+        baseUrl: String,
+        parser: BusinessResponseParser<T, T>,
+        logToggle: Boolean = true
+    ) {
+        BASE_URL = baseUrl
+        responseParser = parser
+        logEnable = logToggle
+    }
+
+    /**
+     * 使用已注册的业务解析器解析响应体
+     * @return 未注册解析器时返回 null，由调用方按成功透传处理
+     */
+    @Suppress("UNCHECKED_CAST")
+    internal fun <T : Any> parseResponse(body: T): HttpResult<T>? {
+        val parser = responseParser as? BusinessResponseParser<T, T>
+        if (parser == null) {
+            Log.w(TAG, "parseResponse() no parser registered for ${body.javaClass.name}, use default success")
+            return null
+        }
+
+        return try {
+            parser.parse(body)
+        } catch (e: Exception) {
+            Log.e(TAG, "parseResponse() failed, body = ${body.javaClass.name}", e)
+            HttpResult.Error("0", e.localizedMessage ?: "业务响应解析异常")
         }
     }
 

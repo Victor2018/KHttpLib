@@ -2,6 +2,7 @@ package org.victor.http.app
 
 import android.app.Application
 import org.victor.http.lib.ApiClient
+import org.victor.http.bizparser.HttpBusinessResponseParser
 
 
 /*
@@ -23,8 +24,7 @@ class App: Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
-        ApiClient.BASE_URL = "https://www.wanandroid.com/"
-        ApiClient.logEnable = true
+        ApiClient.init("https://www.wanandroid.com/", HttpBusinessResponseParser, true)
         ApiClient.addHeader("VersionCode", "v3.0.0")
         ApiClient.addHeader("AccessToken", "token value 5164631")
         ApiClient.addHeader("Content-Type", "application/json")

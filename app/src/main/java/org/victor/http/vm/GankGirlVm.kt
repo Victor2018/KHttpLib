@@ -23,4 +23,12 @@ class GankGirlVm(private val dataSource: IGankGirlDS): ViewModel() {
             dataSource.fetchGankGirl()
         }
     }
+
+    val articleData = dataSource.articleData
+    fun fetchArticle() {
+        // Launch a coroutine that reads from a remote data source and updates cache
+        viewModelScope.launch {
+            dataSource.fetchArticle()
+        }
+    }
 }

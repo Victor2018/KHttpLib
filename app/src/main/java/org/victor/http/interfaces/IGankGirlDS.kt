@@ -1,7 +1,10 @@
 package org.victor.http.interfaces
 
 import androidx.lifecycle.LiveData
-import org.victor.http.data.GankDetailEntity
+import org.victor.http.data.ArticleInfo
+import org.victor.http.data.BasePageRes
+import org.victor.http.data.BaseRes
+import org.victor.http.data.GankDetailInfo
 import org.victor.http.lib.data.HttpResult
 
 
@@ -16,6 +19,9 @@ import org.victor.http.lib.data.HttpResult
  * -----------------------------------------------------------------
  */
 interface IGankGirlDS {
-    val gankGirlData: LiveData<HttpResult<GankDetailEntity>>
+    val gankGirlData: LiveData<HttpResult<BaseRes<GankDetailInfo>>>
     suspend fun fetchGankGirl()
+
+    val articleData: LiveData<HttpResult<BasePageRes<ArticleInfo>>>
+    suspend fun fetchArticle()
 }

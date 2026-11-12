@@ -1,18 +1,18 @@
-package org.victor.http.data
+package org.victor.http.lib.bizparser
+
+import org.victor.http.lib.data.HttpResult
 
 
 /*
  * -----------------------------------------------------------------
  * Copyright (C) 2020-2080, by Victor, All rights reserved.
  * -----------------------------------------------------------------
- * File: GankDetailEntity
+ * File: BusinessResponseParser
  * Author: Victor
- * Date: 2021/2/24 16:39
- * Description: 
+ * Date: 2021/2/24 16:00
+ * Description: 业务响应解析策略
  * -----------------------------------------------------------------
  */
-class GankDetailEntity {
-    var data: List<GankDetailInfo>? = null
-    var errorCode: Int = 0
-    var errorMsg: String? = null
+interface BusinessResponseParser<in T : Any, out R : Any> {
+    fun parse(body: T): HttpResult<R>
 }

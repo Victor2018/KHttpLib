@@ -1,13 +1,13 @@
 package org.victor.http.service
 
-import org.victor.http.data.GankDetailEntity
+import org.victor.http.data.ArticleInfo
+import org.victor.http.data.BasePageRes
+import org.victor.http.data.BaseRes
+import org.victor.http.data.GankDetailInfo
 import org.victor.http.lib.adapter.NetworkResponse
 import org.victor.http.lib.data.HttpError
 import org.victor.http.util.WebConfig
 import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Path
-import retrofit2.http.Query
 
 
 /*
@@ -23,5 +23,8 @@ import retrofit2.http.Query
 interface GankApiService {
 
     @GET(WebConfig.GANK_GIRL)
-    suspend fun fetchGankGirl(): NetworkResponse<GankDetailEntity, HttpError>
+    suspend fun fetchGankGirl(): NetworkResponse<BaseRes<GankDetailInfo>, HttpError>
+
+    @GET(WebConfig.ARTICLE)
+    suspend fun fetchArticle(): NetworkResponse<BasePageRes<ArticleInfo>, HttpError>
 }
